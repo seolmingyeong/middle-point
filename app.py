@@ -444,13 +444,27 @@ if st.session_state.current_room:
 # =========================
 
 if (
+
     "recommendations"
     in st.session_state
+
+    and
+
+    st.session_state.recommendations
+
 ):
 
     recommendations = (
         st.session_state.recommendations
     )
+
+    if len(recommendations) == 0:
+
+        st.warning(
+            "추천 장소가 없습니다."
+        )
+
+        st.stop()
 
     middle_lat = (
         st.session_state.middle_lat
@@ -459,23 +473,6 @@ if (
     middle_lng = (
         st.session_state.middle_lng
     )
-
-    users = []
-
-    for user in users_data:
-
-        users.append({
-
-            "nickname": user[2],
-
-            "name": user[4],
-
-            "lat": user[5],
-
-            "lng": user[6],
-
-            "transport": user[7]
-        })
 
     best_place = recommendations[0]
 
