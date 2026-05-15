@@ -35,97 +35,162 @@ st.markdown(
     """
 <style>
 
-/* 전체 배경 */
+/* =========================
+   공통
+========================= */
 
 .stApp {
 
-    background:
-    linear-gradient(
-        180deg,
-        #fffdf7 0%,
-        #f8fafc 35%,
-        #f5f3ff 70%,
-        #eef2ff 100%
-    );
+    transition:0.3s;
 }
-
-
-/* 전체 글씨 */
-
-html,
-body,
-[class*="css"] {
-
-    color:#334155 !important;
-}
-
-
-/* 모든 텍스트 */
-
-p,
-span,
-label,
-div {
-
-    color:#334155 !important;
-}
-
-
-/* 메인 컨테이너 */
 
 .block-container {
 
-    padding-top:2rem;
-
     max-width:1200px;
+
+    padding-top:2rem;
 }
 
 
-/* 입력창 */
+/* =========================
+   라이트 모드
+========================= */
 
-.stTextInput input {
+@media (prefers-color-scheme: light) {
 
-    background:#ffffff !important;
+    .stApp {
 
-    border:2px solid #ddd6fe !important;
+        background:
+        linear-gradient(
+            180deg,
+            #fffdf7 0%,
+            #f8fafc 35%,
+            #f5f3ff 70%,
+            #eef2ff 100%
+        );
+    }
 
-    border-radius:16px;
+    html,
+    body,
+    p,
+    span,
+    label,
+    div {
 
-    color:#334155 !important;
+        color:#334155 !important;
+    }
 
-    padding:12px;
+    .spacetime-card,
+    .participant-card {
+
+        background:white;
+
+        border:1px solid #e9d5ff;
+    }
+
+    .participant-card {
+
+        border-left:6px solid #8b5cf6;
+    }
+
+    .stTextInput input {
+
+        background:white !important;
+
+        color:#334155 !important;
+
+        border:2px solid #ddd6fe !important;
+
+        border-radius:16px;
+    }
+
+    .stSelectbox div[data-baseweb="select"] {
+
+        background:white !important;
+
+        border-radius:16px;
+
+        border:2px solid #ddd6fe !important;
+    }
 }
 
 
-/* placeholder */
+/* =========================
+   다크 모드
+========================= */
 
-.stTextInput input::placeholder {
+@media (prefers-color-scheme: dark) {
 
-    color:#94a3b8 !important;
+    .stApp {
+
+        background:
+        linear-gradient(
+            180deg,
+            #0f172a 0%,
+            #111827 50%,
+            #1e1b4b 100%
+        );
+    }
+
+    html,
+    body,
+    p,
+    span,
+    label,
+    div {
+
+        color:#f8fafc !important;
+    }
+
+    .spacetime-card,
+    .participant-card {
+
+        background:
+        rgba(
+            30,
+            41,
+            59,
+            0.92
+        );
+
+        border:1px solid #312e81;
+    }
+
+    .participant-card {
+
+        border-left:6px solid #8b5cf6;
+    }
+
+    .stTextInput input {
+
+        background:#1e293b !important;
+
+        color:white !important;
+
+        border:2px solid #4338ca !important;
+
+        border-radius:16px;
+    }
+
+    .stSelectbox div[data-baseweb="select"] {
+
+        background:#1e293b !important;
+
+        border-radius:16px;
+
+        border:2px solid #4338ca !important;
+    }
+
+    .stSelectbox * {
+
+        color:white !important;
+    }
 }
 
 
-/* selectbox */
-
-.stSelectbox div[data-baseweb="select"] {
-
-    background:#ffffff !important;
-
-    border-radius:16px;
-
-    border:2px solid #ddd6fe !important;
-}
-
-
-/* selectbox 내부 */
-
-.stSelectbox * {
-
-    color:#334155 !important;
-}
-
-
-/* 버튼 */
+/* =========================
+   공통 버튼
+========================= */
 
 .stButton > button {
 
@@ -157,12 +222,9 @@ div {
             139,
             92,
             246,
-            0.18
+            0.25
         );
 }
-
-
-/* 버튼 hover */
 
 .stButton > button:hover {
 
@@ -172,13 +234,11 @@ div {
 }
 
 
-/* 카드 */
+/* =========================
+   공통 카드
+========================= */
 
 .spacetime-card {
-
-    background:#ffffff;
-
-    border:1px solid #e9d5ff;
 
     border-radius:24px;
 
@@ -186,21 +246,10 @@ div {
 
     margin-bottom:20px;
 
-    box-shadow:
-        0 10px 30px rgba(
-            139,
-            92,
-            246,
-            0.08
-        );
+    transition:0.3s;
 }
 
-
-/* 참가자 카드 */
-
 .participant-card {
-
-    background:#ffffff;
 
     border-radius:20px;
 
@@ -208,43 +257,17 @@ div {
 
     margin-bottom:14px;
 
-    border-left:6px solid #8b5cf6;
-
-    box-shadow:
-        0 6px 18px rgba(
-            96,
-            165,
-            250,
-            0.08
-        );
+    transition:0.3s;
 }
 
 
-/* alert */
-
-.stAlert {
-
-    background:#ffffff !important;
-
-    border-radius:18px;
-
-    border:1px solid #ddd6fe;
-}
-
-
-/* iframe 지도 */
+/* =========================
+   지도
+========================= */
 
 iframe {
 
     border-radius:24px;
-}
-
-
-/* sidebar */
-
-section[data-testid="stSidebar"] {
-
-    background:#f8fafc;
 }
 
 </style>
