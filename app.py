@@ -28,7 +28,7 @@ st.set_page_config(
 
 
 # =========================
-# 전체 테마 CSS
+# 전체 CSS
 # =========================
 
 st.markdown(
@@ -42,21 +42,42 @@ st.markdown(
     background:
     linear-gradient(
         180deg,
-        #f8fafc 0%,
-        #f5f3ff 35%,
-        #eef2ff 70%,
-        #f0f9ff 100%
+        #fffdf7 0%,
+        #f8fafc 35%,
+        #f5f3ff 70%,
+        #eef2ff 100%
     );
 }
 
 
-/* 기본 텍스트 */
+/* 전체 글씨 */
 
 html,
 body,
 [class*="css"] {
 
-    color:#334155;
+    color:#334155 !important;
+}
+
+
+/* 모든 텍스트 */
+
+p,
+span,
+label,
+div {
+
+    color:#334155 !important;
+}
+
+
+/* 메인 컨테이너 */
+
+.block-container {
+
+    padding-top:2rem;
+
+    max-width:1200px;
 }
 
 
@@ -64,15 +85,23 @@ body,
 
 .stTextInput input {
 
-    background:white;
+    background:#ffffff !important;
 
-    border:2px solid #ddd6fe;
+    border:2px solid #ddd6fe !important;
 
     border-radius:16px;
 
-    color:#334155;
+    color:#334155 !important;
 
-    padding:10px;
+    padding:12px;
+}
+
+
+/* placeholder */
+
+.stTextInput input::placeholder {
+
+    color:#94a3b8 !important;
 }
 
 
@@ -80,9 +109,19 @@ body,
 
 .stSelectbox div[data-baseweb="select"] {
 
-    background:white;
+    background:#ffffff !important;
 
     border-radius:16px;
+
+    border:2px solid #ddd6fe !important;
+}
+
+
+/* selectbox 내부 */
+
+.stSelectbox * {
+
+    color:#334155 !important;
 }
 
 
@@ -97,9 +136,9 @@ body,
         90deg,
         #8b5cf6,
         #60a5fa
-    );
+    ) !important;
 
-    color:white;
+    color:white !important;
 
     border:none;
 
@@ -118,22 +157,18 @@ body,
             139,
             92,
             246,
-            0.22
+            0.18
         );
 }
 
+
+/* 버튼 hover */
 
 .stButton > button:hover {
 
     transform:translateY(-2px);
 
-    box-shadow:
-        0 12px 30px rgba(
-            96,
-            165,
-            250,
-            0.28
-        );
+    opacity:0.95;
 }
 
 
@@ -141,17 +176,9 @@ body,
 
 .spacetime-card {
 
-    background:
-    rgba(
-        255,
-        255,
-        255,
-        0.88
-    );
+    background:#ffffff;
 
-    backdrop-filter:blur(10px);
-
-    border:1px solid #ddd6fe;
+    border:1px solid #e9d5ff;
 
     border-radius:24px;
 
@@ -173,7 +200,7 @@ body,
 
 .participant-card {
 
-    background:white;
+    background:#ffffff;
 
     border-radius:20px;
 
@@ -193,13 +220,31 @@ body,
 }
 
 
-/* 지도 */
+/* alert */
+
+.stAlert {
+
+    background:#ffffff !important;
+
+    border-radius:18px;
+
+    border:1px solid #ddd6fe;
+}
+
+
+/* iframe 지도 */
 
 iframe {
 
     border-radius:24px;
+}
 
-    overflow:hidden;
+
+/* sidebar */
+
+section[data-testid="stSidebar"] {
+
+    background:#f8fafc;
 }
 
 </style>
@@ -254,7 +299,7 @@ margin-bottom:10px;
 <p style="
 text-align:center;
 font-size:18px;
-color:#64748b;
+color:#64748b !important;
 margin-bottom:35px;
 ">
 모두의 시간과 공간을 연결하는 약속 플랫폼
@@ -265,8 +310,15 @@ margin-bottom:35px;
 
 
 # =========================
-# 입력 UI
+# 입력 영역
 # =========================
+
+st.markdown(
+    """
+<div class="spacetime-card">
+""",
+    unsafe_allow_html=True
+)
 
 col1, col2 = st.columns(2)
 
@@ -297,13 +349,8 @@ with col2:
         ]
     )
 
-
-# =========================
-# 참여 버튼
-# =========================
-
 if st.button(
-    "참여하기",
+    "✨ 참여하기",
     key="join_button"
 ):
 
@@ -332,6 +379,11 @@ if st.button(
         "참여 완료!"
     )
 
+st.markdown(
+    "</div>",
+    unsafe_allow_html=True
+)
+
 
 # =========================
 # 참가자 목록
@@ -349,7 +401,7 @@ if st.session_state.current_room:
     st.markdown(
         """
 <h2 style="
-color:#8b5cf6;
+color:#8b5cf6 !important;
 margin-top:30px;
 margin-bottom:20px;
 ">
@@ -368,21 +420,21 @@ margin-bottom:20px;
 <div style="
 font-size:22px;
 font-weight:700;
-color:#8b5cf6;
+color:#8b5cf6 !important;
 margin-bottom:10px;
 ">
 👤 {user[2]}
 </div>
 
 <div style="
-color:#64748b;
+color:#64748b !important;
 margin-bottom:6px;
 ">
 📍 {user[4]}
 </div>
 
 <div style="
-color:#64748b;
+color:#64748b !important;
 ">
 🚗 {user[7]}
 </div>
@@ -481,7 +533,7 @@ if st.session_state.recommendations:
     st.markdown(
         """
 <h2 style="
-color:#8b5cf6;
+color:#8b5cf6 !important;
 margin-top:30px;
 margin-bottom:20px;
 ">
