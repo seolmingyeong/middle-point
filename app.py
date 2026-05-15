@@ -2,6 +2,9 @@
 # app.py
 # =========================
 
+import random
+import string
+
 import streamlit as st
 
 from database import *
@@ -28,7 +31,7 @@ st.set_page_config(
 
 
 # =========================
-# 전체 CSS
+# CSS
 # =========================
 
 st.markdown(
@@ -49,6 +52,16 @@ st.markdown(
     max-width:1200px;
 
     padding-top:2rem;
+}
+
+
+/* svg 아이콘 */
+
+svg {
+
+    color:inherit !important;
+
+    fill:inherit !important;
 }
 
 
@@ -189,7 +202,7 @@ st.markdown(
 
 
 /* =========================
-   공통 버튼
+   버튼
 ========================= */
 
 .stButton > button {
@@ -235,7 +248,7 @@ st.markdown(
 
 
 /* =========================
-   공통 카드
+   카드
 ========================= */
 
 .spacetime-card {
@@ -322,8 +335,8 @@ margin-bottom:10px;
 <p style="
 text-align:center;
 font-size:18px;
-color:#64748b !important;
 margin-bottom:35px;
+opacity:0.8;
 ">
 모두의 시간과 공간을 연결하는 약속 플랫폼
 </p>
@@ -333,88 +346,193 @@ margin-bottom:35px;
 
 
 # =========================
-# 입력 영역
+# 방 입장 전
 # =========================
 
-st.markdown(
-    """
+if not st.session_state.current_room:
+
+    col1, col2 = st.columns(2)
+
+    # =========================
+    # 방 만들기
+    # =========================
+
+    with col1:
+
+        st.markdown(
+            """
 <div class="spacetime-card">
+
+<h3>
+✨ 새 방 만들기
+</h3>
+
+<p>
+새로운 약속 공간 생성
+</p>
+
+</div>
 """,
-    unsafe_allow_html=True
-)
+            unsafe_allow_html=True
+        )
 
-col1, col2 = st.columns(2)
+        if st.button(
+            "방 만들기",
+            key="create_room"
+        ):
 
-with col1:
+            room_id = "".join(
 
-    room_id = st.text_input(
-        "방 코드"
-    )
+                random.choices(
 
-    nickname = st.text_input(
-        "닉네임"
-    )
+                    string.ascii_uppercase
+                    + string.digits,
 
-with col2:
+                    k=6
+                )
+            )
 
-    location_name = st.text_input(
-        "출발 위치"
-    )
+            st.session_state.current_room = (
+                room_id
+            )
 
-    transport = st.selectbox(
+            st.rerun()
 
-        "이동수단",
+    # =========================
+    # 방 입장
+    # =========================
 
-        [
-            "도보",
-            "대중교통",
-            "자동차"
-        ]
-    )
+    with col2:
 
-if st.button(
-    "✨ 참여하기",
-    key="join_button"
-):
+        st.markdown(
+            """
+<div class="spacetime-card">
 
-    save_user(
+<h3>
+🚪 방 입장
+</h3>
 
-        room_id,
+<p>
+기존 약속 공간 참여
+</p>
 
-        nickname,
+</div>
+""",
+            unsafe_allow_html=True
+        )
 
-        "2026-05-15",
+        join_room = st.text_input(
+            "방 코드 입력"
+        )
 
-        location_name,
+        if st.button(
+            "입장하기",
+            key="join_room"
+        ):
 
-        37.5665,
+            st.session_state.current_room = (
+                join_room
+            )
 
-        126.9780,
-
-        transport
-    )
-
-    st.session_state.current_room = (
-        room_id
-    )
-
-    st.success(
-        "참여 완료!"
-    )
-
-st.markdown(
-    "</div>",
-    unsafe_allow_html=True
-)
+            st.rerun()
 
 
 # =========================
-# 참가자 목록
+# 방 입장 후
 # =========================
-
-users_data = []
 
 if st.session_state.current_room:
+
+    st.markdown(
+        f"""
+<div class="spacetime-card">
+
+<h2>
+🌌 방 코드:
+{st.session_state.current_room}
+</h2>
+
+</div>
+""",
+        unsafe_allow_html=True
+    )
+
+    # =========================
+    # 사용자 정보 입력
+    # =========================
+
+    st.markdown(
+        """
+<h3 style="
+margin-top:20px;
+margin-bottom:20px;
+">
+🙋 내 정보 입력
+</h3>
+""",
+        unsafe_allow_html=True
+    )
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        nickname = st.text_input(
+            "닉네임"
+        )
+
+        location_name = st.text_input(
+            "출발 위치"
+        )
+
+    with col2:
+
+        transport = st.selectbox(
+
+            "이동수단",
+
+            [
+                "도보",
+                "대중교통",
+                "자동차"
+            ]
+        )
+
+    # =========================
+    # 저장
+    # =========================
+
+    if st.button(
+        "정보 저장",
+        key="save_user"
+    ):
+
+        save_user(
+
+            st.session_state.current_room,
+
+            nickname,
+
+            "2026-05-15",
+
+            location_name,
+
+            37.5665,
+
+            126.9780,
+
+            transport
+        )
+
+        st.success(
+            "정보 저장 완료!"
+        )
+
+        st.rerun()
+
+    # =========================
+    # 참가자 목록
+    # =========================
 
     users_data = get_room_users(
 
@@ -424,8 +542,7 @@ if st.session_state.current_room:
     st.markdown(
         """
 <h2 style="
-color:#8b5cf6 !important;
-margin-top:30px;
+margin-top:40px;
 margin-bottom:20px;
 ">
 👥 참가자
@@ -443,21 +560,21 @@ margin-bottom:20px;
 <div style="
 font-size:22px;
 font-weight:700;
-color:#8b5cf6 !important;
+color:#8b5cf6;
 margin-bottom:10px;
 ">
 👤 {user[2]}
 </div>
 
 <div style="
-color:#64748b !important;
 margin-bottom:6px;
+opacity:0.85;
 ">
 📍 {user[4]}
 </div>
 
 <div style="
-color:#64748b !important;
+opacity:0.85;
 ">
 🚗 {user[7]}
 </div>
@@ -467,17 +584,74 @@ color:#64748b !important;
             unsafe_allow_html=True
         )
 
+    # =========================
+    # 추천 장소
+    # =========================
 
-# =========================
-# 추천 장소 계산
-# =========================
+    if len(users_data) >= 2:
 
-if len(users_data) >= 2:
+        if st.button(
+            "✨ 추천 장소 찾기",
+            key="recommend_button"
+        ):
 
-    if st.button(
-        "✨ 추천 장소 찾기",
-        key="recommend_button"
-    ):
+            users = []
+
+            for user in users_data:
+
+                users.append({
+
+                    "nickname": user[2],
+
+                    "lat": user[5],
+
+                    "lng": user[6],
+
+                    "transport": user[7]
+                })
+
+            middle_lat, middle_lng = (
+                get_middle_point(users)
+            )
+
+            recommendations = (
+                recommend_places(
+
+                    users,
+
+                    middle_lat,
+
+                    middle_lng
+                )
+            )
+
+            st.session_state.recommendations = (
+                recommendations
+            )
+
+            st.session_state.middle_lat = (
+                middle_lat
+            )
+
+            st.session_state.middle_lng = (
+                middle_lng
+            )
+
+    # =========================
+    # 추천 결과
+    # =========================
+
+    if st.session_state.recommendations:
+
+        recommendations = (
+            st.session_state.recommendations
+        )
+
+        best_place = recommendations[0]
+
+        render_place_card(
+            best_place
+        )
 
         users = []
 
@@ -494,85 +668,25 @@ if len(users_data) >= 2:
                 "transport": user[7]
             })
 
-        middle_lat, middle_lng = (
-            get_middle_point(users)
-        )
-
-        recommendations = (
-            recommend_places(
-
-                users,
-
-                middle_lat,
-
-                middle_lng
-            )
-        )
-
-        st.session_state.recommendations = (
-            recommendations
-        )
-
-        st.session_state.middle_lat = (
-            middle_lat
-        )
-
-        st.session_state.middle_lng = (
-            middle_lng
-        )
-
-
-# =========================
-# 추천 결과
-# =========================
-
-if st.session_state.recommendations:
-
-    recommendations = (
-        st.session_state.recommendations
-    )
-
-    best_place = recommendations[0]
-
-    render_place_card(
-        best_place
-    )
-
-    users = []
-
-    for user in users_data:
-
-        users.append({
-
-            "nickname": user[2],
-
-            "lat": user[5],
-
-            "lng": user[6],
-
-            "transport": user[7]
-        })
-
-    st.markdown(
-        """
+        st.markdown(
+            """
 <h2 style="
-color:#8b5cf6 !important;
-margin-top:30px;
+margin-top:40px;
 margin-bottom:20px;
 ">
 🗺 추천 지도
 </h2>
 """,
-        unsafe_allow_html=True
-    )
+            unsafe_allow_html=True
+        )
 
-    render_map(
+        render_map(
 
-        users,
+            users,
 
-        recommendations,
+            recommendations,
 
-        st.session_state.middle_lat,
+            st.session_state.middle_lat,
 
-        st.session_state.middle_lng
-    )
+            st.session_state.middle_lng
+        )
