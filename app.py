@@ -19,6 +19,8 @@ from map_utils import *
 
 from ui import *
 
+from theme import apply_theme
+
 
 # =========================
 # 페이지 설정
@@ -33,124 +35,10 @@ st.set_page_config(
 
 
 # =========================
-# CSS
+# 테마 적용
 # =========================
 
-st.markdown(
-    """
-<style>
-
-.stApp {
-
-    background:
-    linear-gradient(
-        180deg,
-        #fffdf7 0%,
-        #f8fafc 35%,
-        #f5f3ff 70%,
-        #eef2ff 100%
-    );
-}
-
-.block-container {
-
-    max-width:1200px;
-
-    padding-top:2rem;
-}
-
-svg {
-
-    color:inherit !important;
-
-    fill:inherit !important;
-}
-
-html,
-body,
-p,
-span,
-label,
-div {
-
-    color:#334155 !important;
-}
-
-.stButton > button {
-
-    width:100%;
-
-    background:
-    linear-gradient(
-        90deg,
-        #8b5cf6,
-        #60a5fa
-    ) !important;
-
-    color:white !important;
-
-    border:none;
-
-    border-radius:18px;
-
-    padding:14px;
-
-    font-size:16px;
-
-    font-weight:700;
-}
-
-.spacetime-card {
-
-    background:white;
-
-    border:1px solid #e9d5ff;
-
-    border-radius:24px;
-
-    padding:24px;
-
-    margin-bottom:20px;
-
-    box-shadow:
-        0 10px 30px rgba(
-            139,
-            92,
-            246,
-            0.08
-        );
-}
-
-.participant-card {
-
-    background:white;
-
-    border-radius:20px;
-
-    padding:18px;
-
-    margin-bottom:14px;
-
-    border-left:6px solid #8b5cf6;
-
-    box-shadow:
-        0 6px 18px rgba(
-            96,
-            165,
-            250,
-            0.08
-        );
-}
-
-iframe {
-
-    border-radius:24px;
-}
-
-</style>
-""",
-    unsafe_allow_html=True
-)
+apply_theme()
 
 
 # =========================
@@ -227,11 +115,15 @@ if not st.session_state.current_room:
 
     col1, col2 = st.columns(2)
 
+    # =========================
+    # 방 만들기
+    # =========================
+
     with col1:
 
         st.markdown(
             """
-<div class="spacetime-card">
+<div class="card">
 
 <h3>
 ✨ 새 방 만들기
@@ -268,11 +160,15 @@ if not st.session_state.current_room:
 
             st.rerun()
 
+    # =========================
+    # 방 입장
+    # =========================
+
     with col2:
 
         st.markdown(
             """
-<div class="spacetime-card">
+<div class="card">
 
 <h3>
 🚪 방 입장
@@ -311,7 +207,7 @@ if st.session_state.current_room:
 
     st.markdown(
         f"""
-<div class="spacetime-card">
+<div class="card">
 
 <h2>
 🌌 방 코드:
@@ -448,7 +344,7 @@ margin-bottom:15px;
             st.rerun()
 
     # =========================
-    # 저장
+    # 정보 저장
     # =========================
 
     if st.button(
@@ -510,7 +406,7 @@ margin-bottom:20px;
 
         st.markdown(
             f"""
-<div class="participant-card">
+<div class="card">
 
 <div style="
 font-size:22px;
