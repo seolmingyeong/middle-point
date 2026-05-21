@@ -3,11 +3,11 @@ import streamlit as st
 
 
 # =========================
-# 카카오 API 키
+# Google API Key
 # =========================
 
-KAKAO_REST_API_KEY = st.secrets[
-    "KAKAO_REST_API_KEY"
+GOOGLE_MAPS_API_KEY = st.secrets[
+    "GOOGLE_MAPS_API_KEY"
 ]
 
 
@@ -25,49 +25,121 @@ def get_car_travel_time(
 ):
 
     url = (
-        "https://apis-navi.kakaomobility.com/v1/directions"
+        "https://routes.googleapis.com/directions/v2:computeRoutes"
     )
 
     headers = {
-        "Authorization": (
-            f"KakaoAK {KAKAO_REST_API_KEY}"
+
+        "Content-Type":
+        "application/json",
+
+        "X-Goog-Api-Key":
+        GOOGLE_MAPS_API_KEY,
+
+        "X-Goog-FieldMask":
+        "routes.duration"
+    }
+
+    body = {
+
+        "origin": {
+
+            "location": {
+
+                "latLng": {
+
+                    "latitude":
+                    start_lat,
+
+                    "longitude":
+                    start_lng
+                }
+            }
+        },
+
+        "destination": {
+
+            "location": {
+
+                "latLng": {
+
+                    "latitude":
+                    end_lat,
+
+                    "longitude":
+                    end_lng
+                }
+            }
+        },
+
+        "travelMode":
+        "DRIVE"
+    }
+
+    try:
+
+        response = requests.post(
+
+            url,
+
+            headers=headers,
+
+            json=body
         )
-    }
 
-    params = {
+        # =========================
+        # 응답 출력
+        # =========================
 
-        # 경도,위도 순서 주의
+        print(
+            "Google Routes Response:"
+        )
 
-        "origin":
-        f"{start_lng},{start_lat}",
+        print(
+            response.status_code
+        )
 
-        "destination":
-        f"{end_lng},{end_lat}"
-    }
+        print(
+            response.text
+        )
 
-    response = requests.get(
+        data = response.json()
 
-        url,
+        routes = data.get(
+            "routes"
+        )
 
-        headers=headers,
+        if not routes:
 
-        params=params
-    )
+            return None
 
-    data = response.json()
+        duration = routes[0][
+            "duration"
+        ]
 
-    routes = data.get("routes")
+        # 예:
+        # "1320s"
 
-    if not routes:
+        seconds = int(
+
+            duration.replace(
+                "s",
+                ""
+            )
+        )
+
+        minutes = int(
+            seconds / 60
+        )
+
+        return minutes
+
+    except Exception as e:
+
+        print(
+            "Google Routes Error:"
+        )
+
+        print(e)
 
         return None
-
-    summary = routes[0]["summary"]
-
-    duration = summary["duration"]
-
-    # 초 → 분
-
-    minutes = int(duration / 60)
-
-    return minutes

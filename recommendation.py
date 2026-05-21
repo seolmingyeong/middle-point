@@ -91,13 +91,11 @@ def recommend_places(
 
     best_score = float("inf")
 
-    # =========================
-    # 후보 위치 평가
-    # =========================
-
     for lat, lng in candidates:
 
         times = []
+
+        user_times = []
 
         for user in users:
 
@@ -119,6 +117,15 @@ def recommend_places(
                     travel_time
                 )
 
+                user_times.append({
+
+                    "nickname":
+                    user["nickname"],
+
+                    "travel_time":
+                    travel_time
+                })
+
         if not times:
             continue
 
@@ -128,10 +135,6 @@ def recommend_places(
         )
 
         max_time = max(times)
-
-        # =========================
-        # 점수 계산
-        # =========================
 
         score = (
             avg_time
@@ -160,7 +163,10 @@ def recommend_places(
                 avg_time,
 
                 "max_time":
-                max_time
+                max_time,
+
+                "user_times":
+                user_times
             }
 
     return [best_place]

@@ -7,6 +7,32 @@ import streamlit as st
 
 def render_place_card(place):
 
+    users_html = ""
+
+    for user in place["user_times"]:
+
+        users_html += f"""
+
+<div style="
+margin-bottom:10px;
+padding:12px;
+border-radius:12px;
+background:rgba(148,163,184,0.08);
+">
+
+<b>{user["nickname"]}</b>
+
+<div style="
+margin-top:4px;
+opacity:0.8;
+">
+이동시간:
+{user["travel_time"]}분
+</div>
+
+</div>
+"""
+
     st.markdown(
         f"""
 <div style="
@@ -15,7 +41,6 @@ border-radius:20px;
 border:1px solid rgba(148,163,184,0.2);
 margin-top:30px;
 margin-bottom:30px;
-backdrop-filter:blur(12px);
 ">
 
 <div style="
@@ -45,10 +70,21 @@ margin-bottom:8px;
 
 <div style="
 opacity:0.8;
+margin-bottom:20px;
 ">
 최대 이동시간:
 {place["max_time"]}분
 </div>
+
+<div style="
+font-size:18px;
+font-weight:700;
+margin-bottom:14px;
+">
+참가자별 이동시간
+</div>
+
+{users_html}
 
 </div>
 """,
