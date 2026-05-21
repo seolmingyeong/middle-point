@@ -7,13 +7,57 @@ import streamlit as st
 
 def render_place_card(place):
 
+    # =========================
+    # 현재 테마 확인
+    # =========================
+
+    base = st.get_option(
+        "theme.base"
+    )
+
+    is_dark = (
+        base == "dark"
+    )
+
+    # =========================
+    # 다크모드 색상
+    # =========================
+
+    if is_dark:
+
+        background = "#1e293b"
+
+        border = "#334155"
+
+        title_color = "#f8fafc"
+
+        info_color = "#cbd5e1"
+
+    # =========================
+    # 라이트모드 색상
+    # =========================
+
+    else:
+
+        background = "#ffffff"
+
+        border = "#e2e8f0"
+
+        title_color = "#334155"
+
+        info_color = "#64748b"
+
+    # =========================
+    # 카드 출력
+    # =========================
+
     st.markdown(
         f"""
 <div style="
 padding:28px;
 border-radius:20px;
-background:white;
-border:1px solid #e2e8f0;
+background:{background};
+border:1px solid {border};
 margin-top:30px;
 margin-bottom:30px;
 box-shadow:0 4px 14px rgba(0,0,0,0.04);
@@ -32,13 +76,13 @@ margin-bottom:18px;
 font-size:22px;
 font-weight:600;
 margin-bottom:14px;
-color:#334155;
+color:{title_color};
 ">
 {place["name"]}
 </div>
 
 <div style="
-color:#64748b;
+color:{info_color};
 margin-bottom:8px;
 ">
 평균 이동시간:
@@ -46,7 +90,7 @@ margin-bottom:8px;
 </div>
 
 <div style="
-color:#64748b;
+color:{info_color};
 ">
 최대 이동시간:
 {place["max_time"]}분
