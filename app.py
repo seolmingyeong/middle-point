@@ -409,95 +409,95 @@ margin-bottom:20px;
 
                     st.rerun()
     # =========================
-# 저장 버튼
-# =========================
-
-if st.button(
-
-    "정보 저장",
-
-    key=f"save_user_{st.session_state.current_room}"
-):
-
-    # =========================
-    # 입력값 검증
+    # 저장 버튼
     # =========================
 
-    if not nickname.strip():
+    if st.button(
 
-        st.error(
-            "닉네임을 입력하세요."
-        )
+        "정보 저장",
 
-    elif not location_name.strip():
-
-        st.error(
-            "출발 위치를 입력하세요."
-        )
-
-    elif len(location_name.strip()) < 2:
-
-        st.error(
-            "출발 위치를 정확히 입력하세요."
-        )
-
-    else:
+        key=f"save_user_{st.session_state.current_room}"
+    ):
 
         # =========================
-        # 주소 → 좌표 변환
+        # 입력값 검증
         # =========================
 
-        lat, lng = geocode_location(
-            location_name.strip()
-        )
-
-        # 실제 검색 실패 시만 출력
-
-        if lat is None:
+        if not nickname.strip():
 
             st.error(
-                "위치를 찾을 수 없습니다."
+                "닉네임을 입력하세요."
+            )
+
+        elif not location_name.strip():
+
+            st.error(
+                "출발 위치를 입력하세요."
+            )
+
+        elif len(location_name.strip()) < 2:
+
+            st.error(
+                "출발 위치를 정확히 입력하세요."
             )
 
         else:
 
-            st.session_state.nickname = (
-                nickname
+            # =========================
+            # 주소 → 좌표 변환
+            # =========================
+
+            lat, lng = geocode_location(
+                location_name.strip()
             )
 
-            save_user(
+            # 실제 검색 실패 시만 출력
 
-                st.session_state.current_room,
+            if lat is None:
 
-                nickname,
+                st.error(
+                    "위치를 찾을 수 없습니다."
+                )
 
-                ",".join(
-                    st.session_state.selected_dates
-                ),
+            else:
 
-                location_name,
+                st.session_state.nickname = (
+                    nickname
+                )
 
-                lat,
+                save_user(
 
-                lng,
+                    st.session_state.current_room,
 
-                transport
-            )
+                    nickname,
 
-            st.session_state.save_success = True
+                    ",".join(
+                        st.session_state.selected_dates
+                    ),
 
-            st.rerun()
+                    location_name,
+
+                    lat,
+
+                    lng,
+
+                    transport
+                )
+
+                st.session_state.save_success = True
+
+                st.rerun()
 
 
-# =========================
-# 저장 완료 메시지
-# =========================
+    # =========================
+    # 저장 완료 메시지
+    # =========================
 
-if st.session_state.save_success:
+    if st.session_state.save_success:
 
-    st.success(
-        "정보 저장 완료!"
-    )
+        st.success(
+            "정보 저장 완료!"
+        )
 
     st.session_state.save_success = False
     # =========================
