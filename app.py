@@ -89,7 +89,7 @@ linear-gradient(
 -webkit-text-fill-color:transparent;
 margin-bottom:10px;
 ">
-🌌 스페이스타임
+스페이스타임
 </h1>
 
 <p style="
@@ -124,7 +124,7 @@ if not st.session_state.current_room:
 <div class="card">
 
 <h3>
-✨ 새 방 만들기
+새 방 만들기
 </h3>
 
 <p>
@@ -169,7 +169,7 @@ if not st.session_state.current_room:
 <div class="card">
 
 <h3>
-🚪 방 입장
+방 입장
 </h3>
 
 <p>
@@ -208,7 +208,7 @@ else:
 <div class="card">
 
 <h2>
-🌌 방 코드:
+방 코드:
 {st.session_state.current_room}
 </h2>
 
@@ -227,7 +227,7 @@ else:
 margin-top:20px;
 margin-bottom:20px;
 ">
-🙋 내 정보 입력
+내 정보 입력
 </h3>
 """,
         unsafe_allow_html=True
@@ -277,7 +277,7 @@ margin-bottom:20px;
     font-size:24px;
     font-weight:700;
     ">
-    📅 가능한 날짜
+    가능한 날짜
     </h3>
     """,
         unsafe_allow_html=True
@@ -383,7 +383,7 @@ margin-bottom:20px;
     color:white;
     font-weight:700;
     ">
-    📅 {d}
+    {d}
     </div>
     """,
                     unsafe_allow_html=True
@@ -393,7 +393,7 @@ margin-bottom:20px;
 
                 if st.button(
 
-                    "❌",
+                    "X",
 
                     key=f"remove_date_{idx}"
                 ):
@@ -458,7 +458,7 @@ margin-bottom:20px;
 margin-top:40px;
 margin-bottom:20px;
 ">
-👥 참가자
+참가자
 </h2>
 """,
         unsafe_allow_html=True
@@ -476,27 +476,27 @@ font-weight:700;
 color:#8b5cf6;
 margin-bottom:10px;
 ">
-👤 {user[2]}
+{user[2]}
 </div>
 
 <div style="
 margin-bottom:6px;
 opacity:0.85;
 ">
-📍 {user[4]}
+{user[4]}
 </div>
 
 <div style="
 margin-bottom:6px;
 opacity:0.85;
 ">
-🚗 {user[7]}
+{user[7]}
 </div>
 
 <div style="
 opacity:0.85;
 ">
-📅 {user[3]}
+{user[3]}
 </div>
 
 </div>
@@ -594,7 +594,7 @@ opacity:0.85;
 margin-top:40px;
 margin-bottom:20px;
 ">
-🗺 추천 지도
+추천 지도
 </h2>
 """,
             unsafe_allow_html=True
