@@ -4,13 +4,10 @@ from route_api import (
 
 
 # =========================
-# 사용자 중간 좌표 계산
+# 평균 좌표 계산
 # =========================
 
 def get_middle_point(users):
-
-    if not users:
-        return None, None
 
     avg_lat = sum(
 
@@ -32,6 +29,47 @@ def get_middle_point(users):
 
 
 # =========================
+# 후보 위치 생성
+# =========================
+
+def generate_candidates(
+
+    middle_lat,
+    middle_lng
+):
+
+    offset = 0.005
+
+    return [
+
+        (
+            middle_lat,
+            middle_lng
+        ),
+
+        (
+            middle_lat + offset,
+            middle_lng
+        ),
+
+        (
+            middle_lat - offset,
+            middle_lng
+        ),
+
+        (
+            middle_lat,
+            middle_lng + offset
+        ),
+
+        (
+            middle_lat,
+            middle_lng - offset
+        )
+    ]
+
+
+# =========================
 # 추천 장소 생성
 # =========================
 
@@ -43,75 +81,86 @@ def recommend_places(
     middle_lng
 ):
 
-    if middle_lat is None:
+    candidates = generate_candidates(
 
-        return []
+        middle_lat,
+        middle_lng
+    )
 
-    times = []
+    best_place = None
+
+    best_score = float("inf")
 
     # =========================
-    # 실제 자동차 이동시간 계산
+    # 후보 위치 평가
     # =========================
 
-    for user in users:
+    for lat, lng in candidates:
 
-        travel_time = (
+        times = []
 
-            get_car_travel_time(
+        for user in users:
 
-                user["lat"],
-                user["lng"],
+            travel_time = (
 
-                middle_lat,
-                middle_lng
+                get_car_travel_time(
+
+                    user["lat"],
+                    user["lng"],
+
+                    lat,
+                    lng
+                )
             )
-        )
 
-        if travel_time is not None:
+            if travel_time is not None:
 
-            times.append(
-                travel_time
-            )
+                times.append(
+                    travel_time
+                )
 
-    # =========================
-    # 이동시간 계산 실패
-    # =========================
-
-    if not times:
-
-        avg_time = 0
-        max_time = 0
-
-    else:
+        if not times:
+            continue
 
         avg_time = int(
-
             sum(times)
             / len(times)
         )
 
         max_time = max(times)
 
-    return [
+        # =========================
+        # 점수 계산
+        # =========================
 
-        {
-            "name":
-            "중간 약속 장소",
+        score = (
+            avg_time
+            + max_time
+        )
 
-            "lat":
-            middle_lat,
+        if score < best_score:
 
-            "lng":
-            middle_lng,
+            best_score = score
 
-            "address":
-            "중간 위치 기반 추천",
+            best_place = {
 
-            "avg_time":
-            avg_time,
+                "name":
+                "최적 약속 장소",
 
-            "max_time":
-            max_time
-        }
+                "lat":
+                lat,
 
-    ]
+                "lng":
+                lng,
+
+                "address":
+                "이동시간 기반 추천",
+
+                "avg_time":
+                avg_time,
+
+                "max_time":
+                max_time
+            }
+
+    return [best_place]
