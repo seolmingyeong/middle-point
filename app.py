@@ -435,8 +435,59 @@ margin-bottom:20px;
                 "출발 위치를 입력하세요."
             )
 
+        elif len(location_name.strip()) < 2:
+
+            st.error(
+                "출발 위치를 정확히 입력하세요."
+            )
+
         else:
 
+            # =========================
+            # 주소 → 좌표 변환
+            # =========================
+
+            lat, lng = geocode_location(
+                location_name.strip()
+            )
+
+            # 실제 검색 실패 시만 출력
+
+            if lat is None:
+
+                st.error(
+                    "위치를 찾을 수 없습니다."
+                )
+
+            else:
+
+                st.session_state.nickname = (
+                    nickname
+                )
+
+                save_user(
+
+                    st.session_state.current_room,
+
+                    nickname,
+
+                    ",".join(
+                        st.session_state.selected_dates
+                    ),
+
+                    location_name,
+
+                    lat,
+
+                    lng,
+
+                    transport
+                )
+
+                st.session_state.save_success = True
+
+                st.rerun()
+                
             # =========================
             # 주소 → 좌표 변환
             # =========================
