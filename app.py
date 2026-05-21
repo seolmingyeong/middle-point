@@ -408,6 +408,7 @@ margin-bottom:20px;
                     )
 
                     st.rerun()
+
     # =========================
     # 저장 버튼
     # =========================
@@ -419,9 +420,7 @@ margin-bottom:20px;
         key=f"save_user_{st.session_state.current_room}"
     ):
 
-        # =========================
-        # 입력값 검증
-        # =========================
+        # 닉네임 검증
 
         if not nickname.strip():
 
@@ -429,22 +428,19 @@ margin-bottom:20px;
                 "닉네임을 입력하세요."
             )
 
+        # 위치 검증
+
         elif not location_name.strip():
 
             st.error(
                 "출발 위치를 입력하세요."
             )
 
-        elif len(location_name.strip()) < 2:
-
-            st.error(
-                "출발 위치를 정확히 입력하세요."
-            )
-
         else:
 
             # =========================
             # 주소 → 좌표 변환
+            # 버튼 클릭 시에만 실행
             # =========================
 
             lat, lng = geocode_location(
@@ -500,48 +496,6 @@ margin-bottom:20px;
         )
 
     st.session_state.save_success = False
-    # =========================
-    # 주소 → 좌표 변환
-    # =========================
-
-    lat, lng = geocode_location(
-        location_name
-    )
-
-    if lat is None:
-
-        st.error(
-            "위치를 찾을 수 없습니다."
-        )
-
-        st.stop()
-
-
-    save_user(
-
-        st.session_state.current_room,
-
-        nickname,
-
-        ",".join(
-            st.session_state.selected_dates
-        ),
-
-        location_name,
-
-        lat,
-
-        lng,
-
-        transport
-    )
-
-    st.success(
-        "정보 저장 완료!"
-    )
-
-    st.rerun()
-
     # =========================
     # 참가자 목록
     # =========================
