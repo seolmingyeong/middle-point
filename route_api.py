@@ -1,21 +1,73 @@
-def get_route_time(
+import requests
+import streamlit as st
+
+
+# =========================
+# 카카오 API 키
+# =========================
+
+KAKAO_REST_API_KEY = st.secrets[
+    "KAKAO_REST_API_KEY"
+]
+
+
+# =========================
+# 자동차 이동시간 계산
+# =========================
+
+def get_car_travel_time(
+
     start_lat,
     start_lng,
+
     end_lat,
-    end_lng,
-    transport
+    end_lng
 ):
 
-    if transport == "도보":
+    url = (
+        "https://apis-navi.kakaomobility.com/v1/directions"
+    )
 
-        return 35
+    headers = {
+        "Authorization": (
+            f"KakaoAK {KAKAO_REST_API_KEY}"
+        )
+    }
 
-    elif transport == "대중교통":
+    params = {
 
-        return 28
+        # 경도,위도 순서 주의
 
-    elif transport == "자동차":
+        "origin":
+        f"{start_lng},{start_lat}",
 
-        return 18
+        "destination":
+        f"{end_lng},{end_lat}"
+    }
 
-    return 30
+    response = requests.get(
+
+        url,
+
+        headers=headers,
+
+        params=params
+    )
+
+    data = response.json()
+
+    routes = data.get("routes")
+
+    if not routes:
+
+        return None
+
+    summary = routes[0]["summary"]
+
+    duration = summary["duration"]
+
+    # 초 → 분
+
+    minutes = int(duration / 60)
+
+    return minutes

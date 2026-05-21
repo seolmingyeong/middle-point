@@ -1,4 +1,6 @@
-import math
+from route_api import (
+    get_car_travel_time
+)
 
 
 # =========================
@@ -36,6 +38,38 @@ def recommend_places(
     if middle_lat is None:
         return []
 
+    times = []
+
+    for user in users:
+
+        travel_time = get_car_travel_time(
+
+            user["lat"],
+            user["lng"],
+
+            middle_lat,
+            middle_lng
+        )
+
+        if travel_time is not None:
+
+            times.append(
+                travel_time
+            )
+
+    if not times:
+
+        avg_time = 0
+        max_time = 0
+
+    else:
+
+        avg_time = int(
+            sum(times) / len(times)
+        )
+
+        max_time = max(times)
+
     return [
 
         {
@@ -47,9 +81,9 @@ def recommend_places(
 
             "address": "중간 위치 기반 추천",
 
-            "avg_time": 25,
+            "avg_time": avg_time,
 
-            "max_time": 40
+            "max_time": max_time
         }
 
     ]
